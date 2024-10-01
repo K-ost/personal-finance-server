@@ -28,35 +28,35 @@ server.get("/api/budgets/transactions", async (req, res) => {
   }
 });
 
-server.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://personal-finance-server.onrender.com"
-  );
+// server.use(function (req, res, next) {
+//   // Website you wish to allow to connect
+//   res.setHeader(
+//     "Access-Control-Allow-Origin",
+//     "https://personal-finance-server.onrender.com"
+//   );
 
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
+//   // Request methods you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
 
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
+//   // Request headers you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With,content-type"
+//   );
 
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
+//   // Set to true if you need the website to include cookies in the requests sent
+//   // to the API (e.g. in case you use sessions)
+//   res.setHeader("Access-Control-Allow-Credentials", true);
 
-  // Pass to next layer of middleware
-  next();
-});
+//   // Pass to next layer of middleware
+//   next();
+// });
 
 server.use(middlewares);
-server.use(cors({ origin: "*" }));
+server.use(cors({ origin: "http://localhost:5173" }));
 server.use("/api", auth);
 server.use("/api", router);
 
