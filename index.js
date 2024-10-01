@@ -19,7 +19,6 @@ server.get("/api/budgets/transactions", async (req, res) => {
         .slice(0, 3);
       return {
         ...budget,
-        spent: 0,
         latest: transactions,
       };
     });
