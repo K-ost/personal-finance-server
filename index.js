@@ -24,7 +24,7 @@ server.get("/api/budgets/transactions", function (req, res) {
   return res.json(output);
 });
 
-server.db = router.db;
+// server.db = router.db;
 
 server.use(middlewares);
 server.use(cors());
