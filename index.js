@@ -1,5 +1,4 @@
 const jsonServer = require("json-server");
-const cors = require("cors");
 const auth = require("json-server-auth");
 const db = require("./db.json");
 
@@ -21,13 +20,10 @@ server.get("/api/budgets/transactions", function (req, res) {
       latest: transactions,
     };
   });
-  return res.json(output);
+  return res.jsonp(output);
 });
 
-// server.db = router.db;
-
 server.use(middlewares);
-server.use(cors());
 server.use("/api", auth);
 server.use("/api", router);
 
