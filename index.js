@@ -28,6 +28,8 @@ server.get("/api/budgets/transactions", async (req, res) => {
   }
 });
 
+server.db = router.db;
+
 server.use(middlewares);
 server.use("/api", auth);
 server.use("/api", router);
