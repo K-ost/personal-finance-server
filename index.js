@@ -11,6 +11,16 @@ const middlewares = jsonServer.defaults();
 server.use(cors());
 
 // Add custom routes
+server.get("/api/transactions", async (req, res) => {
+  try {
+    return res.jsonp({
+      count: db.transactions.length,
+      data: db.transactions,
+    });
+  } catch (error) {
+    return res.jsonp({ msg: "Server error" });
+  }
+});
 server.get("/api/budgets/transactions", async (req, res) => {
   try {
     const output = db.budgets.map((budget) => {
