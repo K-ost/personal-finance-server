@@ -1,0 +1,28 @@
+### Sign In
+POST http://localhost:8000/api/login
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "123456"
+}
+
+### Transactions
+
+GET http://localhost:8000/api/transactions
+
+### Budgets
+
+GET http://localhost:8000/api/budgets
+Authorization: Bearer token
+
+###
+DELETE http://localhost:8000/api/budgets/67be2ecad2cf54f32cf456dc
+
+### Pots
+
+GET http://localhost:8000/api/pots
+
+### Users
+
+GET http://localhost:8000/api/users
