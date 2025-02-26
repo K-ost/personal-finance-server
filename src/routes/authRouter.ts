@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../schemas/User";
 import { LoginOutput } from "../types";
-import { TOKEY_KEY } from "../constants";
+import { TOKEN_KEY } from "../constants";
 
 const authRouter = Router();
 
@@ -22,7 +22,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
       return res.status(403).send({ msg: "Incorrect password" });
     }
 
-    const accessToken = jwt.sign(req.body, TOKEY_KEY, {
+    const accessToken = jwt.sign(req.body, TOKEN_KEY, {
       expiresIn: "1h",
     });
 

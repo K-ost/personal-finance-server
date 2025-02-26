@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Model } from "mongoose";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { SERVER_ERROR, TOKEY_KEY } from "./constants";
+import jwt from "jsonwebtoken";
+import { SERVER_ERROR, TOKEN_KEY } from "./constants";
 
 export const getCurrentPage = (pageCount: number, page: number): number => {
   const current = page || 1;
@@ -63,7 +63,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
   const token = authHeader && authHeader.split(" ")[1];
   if (!token) res.status(401).send({ msg: "Access denied" });
   if (token) {
-    jwt.verify(token, TOKEY_KEY, (err, decoded) => {
+    jwt.verify(token, TOKEN_KEY, (err, decoded) => {
       if (err) return res.status(403).send({ msg: "Invalid token" });
       next();
     });
