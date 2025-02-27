@@ -29,11 +29,13 @@ export type PotType = {
   _id?: string;
 };
 
+export type RoleType = "admin" | "user";
+
 export type UserType = {
   email: string;
   password: string;
   name: string;
-  role: "admin" | "user";
+  role: RoleType;
   avatar: string;
   _id?: string;
 };

@@ -1,7 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { Model } from "mongoose";
-import jwt from "jsonwebtoken";
-import { SERVER_ERROR, TOKEN_KEY } from "./constants";
+import { Request } from "express";
 
 export const getCurrentPage = (pageCount: number, page: number): number => {
   const current = page || 1;
@@ -17,4 +14,10 @@ export const getFilters = (req: Request): any => {
     delete filter.sort;
   }
   return filter;
+};
+
+export const getToken = (req: Request): string => {
+  const authHeader = req.header("Authorization");
+  const token = authHeader && authHeader.split(" ")[1];
+  return token!;
 };

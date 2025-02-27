@@ -76,7 +76,7 @@ export const deleteData = async <T>(
 ): Promise<void> => {
   try {
     await model.deleteOne({ _id: req.params.id });
-    res.send({ msg: "Budget has been removed" });
+    res.send({ msg: "Entity has been removed" });
   } catch (error) {
     res.send({ msg: SERVER_ERROR });
   }
