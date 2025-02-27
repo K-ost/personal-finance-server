@@ -10,18 +10,17 @@ Content-Type: application/json
 ### Transactions
 
 GET http://localhost:8000/api/transactions
+Authorization: Bearer token
 
 ### Budgets
 
 GET http://localhost:8000/api/budgets
 Authorization: Bearer token
 
-###
-DELETE http://localhost:8000/api/budgets/67be2ecad2cf54f32cf456dc
-
 ### Pots
 
 GET http://localhost:8000/api/pots
+Authorization: Bearer token
 
 ### Users
 

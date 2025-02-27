@@ -1,14 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 import transactionRouter from "./routes/TransactionRoute";
 import budgetRouter from "./routes/budgetRouter";
 import potRouter from "./routes/potRouter";
-import bodyParser from "body-parser";
 import authRouter from "./routes/authRouter";
 import sighUpRouter from "./routes/signUpRouter";
 import userRouter from "./routes/UserRoute";
-import { verifyToken } from "./utils";
+import { verifyToken } from "./middleware";
 
 // Server settings
 dotenv.config();
@@ -23,9 +23,9 @@ server.get("/", (req: Request, res: Response) => {
 });
 
 // Routes
-server.use("/api/transactions", transactionRouter);
+server.use("/api/transactions", verifyToken, transactionRouter);
 server.use("/api/budgets", verifyToken, budgetRouter);
-server.use("/api/pots", potRouter);
+server.use("/api/pots", verifyToken, potRouter);
 server.use("/api/users", userRouter);
 server.use("/api/signup", sighUpRouter);
 server.use("/api/login", authRouter);
