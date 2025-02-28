@@ -25,4 +25,4 @@ Authorization: Bearer token
 ### Users
 
 GET http://localhost:8000/api/users
-Authorization: Bearer token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHRlc3QuY29tIiwicGFzc3dvcmQiOiIxMjM0NTYiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDA3MzI0OTcsImV4cCI6MTc0MDczNjA5N30.XWGyCvmlIfyY0CrIZL8iQuWN52kdmG3Ag2OdTs3kzh4
