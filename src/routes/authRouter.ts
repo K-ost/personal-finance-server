@@ -22,6 +22,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
       return res.status(403).send({ msg: "Incorrect password" });
     }
 
+    // Generating access token
     const accessToken = jwt.sign({ email, password, role: user.role }, TOKEN_KEY, {
       expiresIn: "1h",
     });
