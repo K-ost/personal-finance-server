@@ -1,17 +1,18 @@
 import { Request, Response, Router } from "express";
 import { Transaction } from "../schemas/Transaction";
-import { requestData, requestSingleData } from "../api";
+import { RequestData } from "../api";
 import { TransactionType } from "../types";
 import { PAGE_COUNT } from "../constants";
 
 const transactionRouter = Router();
+const request = new RequestData();
 
 transactionRouter.get("/", async (req: Request, res: Response) =>
-  requestData<TransactionType>(req, res, Transaction, PAGE_COUNT)
+  request.getData<TransactionType>(req, res, Transaction, PAGE_COUNT)
 );
 
 transactionRouter.get("/:id", async (req: Request, res: Response) =>
-  requestSingleData<TransactionType>(req, res, Transaction)
+  request.getSingleData<TransactionType>(req, res, Transaction)
 );
 
 export default transactionRouter;
