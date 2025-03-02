@@ -13,7 +13,6 @@ export class RequestData {
       const length = (await model.find({})).length;
 
       const data = await model.find(filter).sort(sort).skip(currentPage).limit(pageCount);
-      const output = data.map((el) => el.id);
 
       res.status(200).send({
         data,
