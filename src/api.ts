@@ -4,12 +4,7 @@ import { getCurrentPage, getFilters } from "./utils";
 import { FORBIDDEN_IDS, SERVER_ERROR } from "./constants";
 
 export class RequestData {
-  async getData<T>(
-    req: Request,
-    res: Response,
-    model: Model<T>,
-    pageCount: number
-  ): Promise<void> {
+  async getData<T>(req: Request, res: Response, model: Model<T>, pageCount: number) {
     const sort = `field ${req.query.sort ? req.query.sort : "date"}`;
     const currentPage = getCurrentPage(pageCount, Number(req.query.page) || 1);
     const filter = getFilters(req);
@@ -18,6 +13,7 @@ export class RequestData {
       const length = (await model.find({})).length;
 
       const data = await model.find(filter).sort(sort).skip(currentPage).limit(pageCount);
+      const output = data.map((el) => el.id);
 
       res.status(200).send({
         data,
@@ -29,7 +25,7 @@ export class RequestData {
     }
   }
 
-  async getSingleData<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
+  async getSingleData<T>(req: Request, res: Response, model: Model<T>) {
     try {
       const data = await model.findById(req.params.id);
       res.status(200).send(data);
@@ -38,7 +34,7 @@ export class RequestData {
     }
   }
 
-  async postData<T>(req: Request, res: Response, model: Model<T>): Promise<void> {
+  async postData<T>(req: Request, res: Response, model: Model<T>) {
     try {
       const data = await model.create(req.body);
       res.send(data);
@@ -47,11 +43,12 @@ export class RequestData {
     }
   }
 
-  async editData<T>(req: Request, res: Response, model: Model<T>): Promise<any> {
+  async editData<T>(req: Request, res: Response, model: Model<T>) {
     try {
       const isForbidden = FORBIDDEN_IDS.some((el) => el === req.params.id);
       if (isForbidden) {
-        return res.status(403).send({ msg: "This entity cannot be edited" });
+        res.status(403).send({ msg: "This entity cannot be edited" });
+        return;
       }
       const data = await model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -62,11 +59,12 @@ export class RequestData {
     }
   }
 
-  async deleteData<T>(req: Request, res: Response, model: Model<T>): Promise<any> {
+  async deleteData<T>(req: Request, res: Response, model: Model<T>) {
     try {
       const isForbidden = FORBIDDEN_IDS.some((el) => el === req.params.id);
       if (isForbidden) {
-        return res.status(403).send({ msg: "This entity cannot be removed" });
+        res.status(403).send({ msg: "This entity cannot be removed" });
+        return;
       }
       await model.deleteOne({ _id: req.params.id });
       res.send({ msg: "Entity has been removed" });

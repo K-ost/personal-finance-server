@@ -1,7 +1,8 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+import cors from "cors";
 import transactionRouter from "./routes/TransactionRoute";
 import budgetRouter from "./routes/budgetRouter";
 import potRouter from "./routes/potRouter";
@@ -16,6 +17,7 @@ const server: Express = express();
 const PORT = process.env.PORT || 8000;
 server.set("json spaces", 2);
 server.use(bodyParser.json());
+server.use(cors());
 const verifyToken = new VerifyToken();
 
 // Main route

@@ -17,18 +17,20 @@ budgetRouter.get("/:id", async (req: Request, res: Response) => {
 
 budgetRouter.post(
   "/",
-  async (req: Request, res: Response): Promise<void> => request.postData(req, res, Budget)
+  async (req: Request, res: Response): Promise<void> =>
+    request.postData<BudgetType>(req, res, Budget)
 );
 
 budgetRouter.patch(
   "/:id",
-  async (req: Request, res: Response): Promise<void> => request.editData(req, res, Budget)
+  async (req: Request, res: Response): Promise<void> =>
+    request.editData<BudgetType>(req, res, Budget)
 );
 
 budgetRouter.delete(
   "/:id",
   async (req: Request, res: Response): Promise<void> =>
-    request.deleteData(req, res, Budget)
+    request.deleteData<BudgetType>(req, res, Budget)
 );
 
 export default budgetRouter;

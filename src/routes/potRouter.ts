@@ -21,17 +21,20 @@ potRouter.get(
 
 potRouter.post(
   "/",
-  async (req: Request, res: Response): Promise<void> => request.postData(req, res, Pot)
+  async (req: Request, res: Response): Promise<void> =>
+    request.postData<PotType>(req, res, Pot)
 );
 
 potRouter.patch(
   "/:id",
-  async (req: Request, res: Response): Promise<void> => request.editData(req, res, Pot)
+  async (req: Request, res: Response): Promise<void> =>
+    request.editData<PotType>(req, res, Pot)
 );
 
 potRouter.delete(
   "/:id",
-  async (req: Request, res: Response): Promise<void> => request.deleteData(req, res, Pot)
+  async (req: Request, res: Response): Promise<void> =>
+    request.deleteData<PotType>(req, res, Pot)
 );
 
 export default potRouter;
