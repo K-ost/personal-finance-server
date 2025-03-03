@@ -11,4 +11,5 @@ export const FORBIDDEN_IDS = [
   "67badd76e24aff4580c9eeaa",
   "67badd87e24aff4580c9eeab",
   "67badd9ae24aff4580c9eeac",
+  "67c61872c79504186ca2d589",
 ];

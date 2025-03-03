@@ -1,11 +1,11 @@
 import { Request, Response, Router } from "express";
 import { Pot } from "../schemas/Pot";
-import { RequestData } from "../api";
+import { RequestController } from "../api";
 import { PAGE_COUNT } from "../constants";
 import { PotType } from "../types";
 
 const potRouter = Router();
-const request = new RequestData();
+const request = new RequestController();
 
 potRouter.get(
   "/",
