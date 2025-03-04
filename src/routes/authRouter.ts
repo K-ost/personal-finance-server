@@ -23,9 +23,13 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
     }
 
     // Generating access token
-    const accessToken = jwt.sign({ email, password, role: user.role }, TOKEN_KEY, {
-      expiresIn: "1h",
-    });
+    const accessToken = jwt.sign(
+      { email, password, role: user.role, userId: user._id },
+      TOKEN_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     const output: LoginResponse = {
       accessToken,

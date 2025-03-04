@@ -4,6 +4,12 @@ import { TOKEN_KEY } from "./constants";
 import { getToken } from "./utils";
 import { RoleType } from "./types";
 
+declare module "express-serve-static-core" {
+  interface Request {
+    userId?: string;
+  }
+}
+
 const verifyToken = (
   req: Request,
   res: Response,
@@ -15,6 +21,7 @@ const verifyToken = (
   if (token) {
     jwt.verify(token, TOKEN_KEY, (err, decoded: any) => {
       if (err) return res.status(403).send({ msg: "Invalid token" });
+      req.userId = decoded.userId;
       if (role === "admin" && decoded.role !== "admin") {
         return res.status(403).send({ msg: "Only for admin" });
       }
