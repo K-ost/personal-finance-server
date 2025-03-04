@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { body, Result, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { User } from "../schemas/User";
+import { MESSAGES } from "../constants";
 
 const sighUpRouter = Router();
 
@@ -37,7 +38,7 @@ sighUpRouter.post(
       const existed = await User.findOne({ email });
 
       if (!!existed) {
-        return res.status(403).send({ msg: "User already exists" });
+        return res.status(403).send({ msg: MESSAGES.userExists });
       }
 
       const hashedPass = bcrypt.hashSync(password, 7);
@@ -52,7 +53,7 @@ sighUpRouter.post(
 
       res.status(201).send(data);
     } catch (error) {
-      res.status(500).send({ msg: "Server error" });
+      res.status(500).send({ msg: MESSAGES.serverError });
     }
   }
 );

@@ -5,6 +5,7 @@ const budgetSchema = new Schema<BudgetType>({
   category: { type: String, required: true },
   maximum: { type: Number, required: true },
   theme: { type: String, required: true },
+  userId: { type: String, required: true },
 });
 
 export const Budget = model("Budget", budgetSchema);

@@ -2,8 +2,8 @@ import { Request, Response, Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../schemas/User";
-import { LoginOutput } from "../types";
-import { TOKEN_KEY } from "../constants";
+import { LoginResponse } from "../types";
+import { MESSAGES, TOKEN_KEY } from "../constants";
 
 const authRouter = Router();
 
@@ -27,7 +27,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
       expiresIn: "1h",
     });
 
-    const output: LoginOutput = {
+    const output: LoginResponse = {
       accessToken,
       user: {
         avatar: user.avatar,
@@ -39,7 +39,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
     };
     return res.status(201).send(output);
   } catch (error) {
-    res.status(500).send({ msg: "Server error" });
+    res.status(500).send({ msg: MESSAGES.serverError });
   }
 });
 

@@ -2,6 +2,7 @@ export type BalanceType = {
   current: number;
   income: number;
   expenses: number;
+  userId: string;
 };
 
 export type TransactionType = {
@@ -18,6 +19,7 @@ export type BudgetType = {
   category: string;
   maximum: number;
   theme: string;
+  userId: string;
   _id?: string;
 };
 
@@ -26,6 +28,7 @@ export type PotType = {
   target: number;
   total: number;
   theme: string;
+  userId: string;
   _id?: string;
 };
 
@@ -40,7 +43,7 @@ export type UserType = {
   _id?: string;
 };
 
-export type LoginOutput = {
+export type LoginResponse = {
   accessToken: string;
   user: Omit<UserType, "password">;
 };
