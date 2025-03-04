@@ -13,12 +13,6 @@ potRouter.get(
     request.getData<PotType>(req, res, Pot, PAGE_COUNT)
 );
 
-potRouter.get(
-  "/:id",
-  async (req: Request, res: Response): Promise<void> =>
-    request.getSingleData<PotType>(req, res, Pot)
-);
-
 potRouter.post(
   "/",
   async (req: Request, res: Response): Promise<void> =>

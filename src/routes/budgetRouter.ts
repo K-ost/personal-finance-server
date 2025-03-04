@@ -11,10 +11,6 @@ budgetRouter.get("/", async (req: Request, res: Response) => {
   request.getData<BudgetType>(req, res, Budget, PAGE_COUNT);
 });
 
-budgetRouter.get("/:id", async (req: Request, res: Response) => {
-  request.getSingleData<BudgetType>(req, res, Budget);
-});
-
 budgetRouter.post(
   "/",
   async (req: Request, res: Response): Promise<void> =>

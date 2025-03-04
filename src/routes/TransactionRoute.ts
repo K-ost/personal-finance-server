@@ -11,8 +11,4 @@ transactionRouter.get("/", async (req: Request, res: Response) =>
   request.getData<TransactionType>(req, res, Transaction, PAGE_COUNT)
 );
 
-transactionRouter.get("/:id", async (req: Request, res: Response) =>
-  request.getSingleData<TransactionType>(req, res, Transaction)
-);
-
 export default transactionRouter;
