@@ -12,7 +12,7 @@ export class RequestController {
   }
 
   private getFilters(req: Request): any {
-    const filter = req.query;
+    const filter = { ...req.query };
     if (filter.hasOwnProperty("page")) {
       delete filter.page;
     }
@@ -27,16 +27,16 @@ export class RequestController {
   }
 
   async getData<T>(req: Request, res: Response, model: Model<T>, pageCount: number) {
-    const sort = `field ${req.query.sort ? req.query.sort : "date"}`;
-    const skip = this.getCurrentPage(pageCount, Number(req.query.page) || 1);
-    const filter = this.getFilters(req);
-    const userIdFilter = this.getUserIdFilter(req.baseUrl, req.userId);
-
     try {
+      const sort = `field ${req.query.sort ? req.query.sort : "date"}`;
+      const skip = this.getCurrentPage(pageCount, Number(req.query.page) || 1);
+      const filter = this.getFilters(req);
+      const userIdFilter = this.getUserIdFilter(req.baseUrl, req.userId);
+
       const length = (await model.find(userIdFilter)).length;
 
       const data = await model
-        .find({ ...filter, ...userIdFilter })
+        .find({ ...filter })
         .sort(sort)
         .skip(skip)
         .limit(pageCount);
