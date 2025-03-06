@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import { Pot } from "../schemas/Pot";
 import { RequestController } from "../api";
-import { PAGE_COUNT } from "../constants";
 import { PotType } from "../types";
 
 const potRouter = Router();
@@ -10,7 +9,7 @@ const request = new RequestController();
 potRouter.get(
   "/",
   async (req: Request, res: Response): Promise<void> =>
-    request.getData<PotType>(req, res, Pot, PAGE_COUNT)
+    request.getData<PotType>(req, res, Pot)
 );
 
 potRouter.post(

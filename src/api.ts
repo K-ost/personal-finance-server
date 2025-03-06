@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Model } from "mongoose";
-import { FORBIDDEN_USER_IDS, MESSAGES } from "./constants";
+import { FORBIDDEN_USER_IDS, MESSAGES, PAGE_COUNT } from "./constants";
 import { Pot } from "./schemas/Pot";
 import { Budget } from "./schemas/Budget";
 import { User } from "./schemas/User";
@@ -19,6 +19,9 @@ export class RequestController {
     if (filter.hasOwnProperty("sort")) {
       delete filter.sort;
     }
+    if (filter.hasOwnProperty("limit")) {
+      delete filter.limit;
+    }
     return filter;
   }
 
@@ -26,10 +29,11 @@ export class RequestController {
     return url === "/api/transactions" || url === "/api/users" ? {} : { userId };
   }
 
-  async getData<T>(req: Request, res: Response, model: Model<T>, pageCount: number) {
+  async getData<T>(req: Request, res: Response, model: Model<T>) {
     try {
+      const limit = req.query.limit ? Number(req.query.limit) : PAGE_COUNT;
       const sort = `field ${req.query.sort ? req.query.sort : "date"}`;
-      const skip = this.getCurrentPage(pageCount, Number(req.query.page) || 1);
+      const skip = this.getCurrentPage(limit, Number(req.query.page) || 1);
       const filter = this.getFilters(req);
       const userIdFilter = this.getUserIdFilter(req.baseUrl, req.userId);
 
@@ -39,7 +43,7 @@ export class RequestController {
         .find({ ...filter })
         .sort(sort)
         .skip(skip)
-        .limit(pageCount);
+        .limit(limit);
 
       res.status(200).send({
         data,

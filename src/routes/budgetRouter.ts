@@ -1,14 +1,13 @@
 import { Request, Response, Router } from "express";
 import { Budget } from "../schemas/Budget";
 import { RequestController } from "../api";
-import { PAGE_COUNT } from "../constants";
 import { BudgetType } from "../types";
 
 const budgetRouter = Router();
 const request = new RequestController();
 
 budgetRouter.get("/", async (req: Request, res: Response) => {
-  request.getData<BudgetType>(req, res, Budget, PAGE_COUNT);
+  request.getData<BudgetType>(req, res, Budget);
 });
 
 budgetRouter.post(
