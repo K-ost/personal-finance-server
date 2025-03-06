@@ -4,6 +4,7 @@ import { FORBIDDEN_USER_IDS, MESSAGES, PAGE_COUNT } from "./constants";
 import { Pot } from "./schemas/Pot";
 import { Budget } from "./schemas/Budget";
 import { User } from "./schemas/User";
+import { ServerResponse } from "./types";
 
 export class RequestController {
   private getCurrentPage(pageCount: number, page: number): number {
@@ -29,7 +30,7 @@ export class RequestController {
     return url === "/api/transactions" || url === "/api/users" ? {} : { userId };
   }
 
-  async getData<T>(req: Request, res: Response, model: Model<T>) {
+  async getData<T>(req: Request, res: Response<ServerResponse<T[]>>, model: Model<T>) {
     try {
       const limit = req.query.limit ? Number(req.query.limit) : PAGE_COUNT;
       const sort = `field ${req.query.sort ? req.query.sort : "date"}`;
@@ -48,14 +49,15 @@ export class RequestController {
       res.status(200).send({
         data,
         count: length,
-        page: req.query.page || 1,
+        page: Number(req.query.page) || 1,
+        msg: "Ok",
       });
     } catch (error) {
       res.send({ msg: MESSAGES.serverError });
     }
   }
 
-  async postData<T>(req: Request, res: Response, model: Model<T>) {
+  async postData<T>(req: Request, res: Response<ServerResponse<T>>, model: Model<T>) {
     try {
       const { name, userId } = req.body;
       const existed = await model.findOne({ userId, name });
@@ -64,39 +66,39 @@ export class RequestController {
         return;
       }
       const data = await model.create(req.body);
-      res.send(data);
+      res.send({ data, msg: MESSAGES.entityAdded });
     } catch (error) {
       res.send({ msg: MESSAGES.serverError });
     }
   }
 
-  async editData<T>(req: Request, res: Response, model: Model<T>) {
+  async editData<T>(req: Request, res: Response<ServerResponse<T>>, model: Model<T>) {
     try {
       const data = await model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       });
-      res.status(201).send(data);
+      res.status(201).send({ data: data!, msg: MESSAGES.entityEdited });
     } catch (error) {
       res.send({ msg: MESSAGES.serverError });
     }
   }
 
-  async deleteData<T>(req: Request, res: Response, model: Model<T>) {
+  async deleteData<T>(req: Request, res: Response<ServerResponse<T>>, model: Model<T>) {
     try {
       await model.deleteOne({ _id: req.params.id });
-      res.send({ msg: "Entity has been removed" });
+      res.send({ msg: MESSAGES.entityDeleted });
     } catch (error) {
       res.send({ msg: MESSAGES.serverError });
     }
   }
 
-  async clearAll(req: Request, res: Response) {
+  async clearAll(req: Request, res: Response<ServerResponse<any>>) {
     try {
       const filter = { $nin: FORBIDDEN_USER_IDS };
       await Budget.deleteMany({ userId: filter });
       await Pot.deleteMany({ userId: filter });
       await User.deleteMany({ _id: filter });
-      res.send({ msg: "Database has been cleaned" });
+      res.send({ msg: MESSAGES.dbCleaned });
     } catch (error) {
       res.send({ msg: MESSAGES.serverError });
     }

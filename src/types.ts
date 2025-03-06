@@ -47,3 +47,10 @@ export type LoginResponse = {
   accessToken: string;
   user: Omit<UserType, "password">;
 };
+
+export type ServerResponse<T> = {
+  data?: T;
+  count?: number;
+  page?: number;
+  msg?: string;
+};

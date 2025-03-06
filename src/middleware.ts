@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { TOKEN_KEY } from "./constants";
+import { MESSAGES, TOKEN_KEY } from "./constants";
 import { getToken } from "./utils";
 import { RoleType } from "./types";
 
@@ -17,13 +17,13 @@ const verifyToken = (
   role: RoleType
 ): void => {
   const token = getToken(req);
-  if (!token) res.status(401).send({ msg: "Access denied" });
+  if (!token) res.status(401).send({ msg: MESSAGES.token.accessDenied });
   if (token) {
     jwt.verify(token, TOKEN_KEY, (err, decoded: any) => {
-      if (err) return res.status(403).send({ msg: "Invalid token" });
+      if (err) return res.status(403).send({ msg: MESSAGES.token.invalid });
       req.userId = decoded.userId;
       if (role === "admin" && decoded.role !== "admin") {
-        return res.status(403).send({ msg: "Only for admin" });
+        return res.status(403).send({ msg: MESSAGES.token.adminOnly });
       }
       next();
     });

@@ -10,4 +10,13 @@ export const MESSAGES = {
   serverError: "Server error",
   entityExists: "Entity with this already exists",
   userExists: "User already exists",
+  entityAdded: "The entity has been added",
+  entityEdited: "The entity has been edited",
+  entityDeleted: "The entity has been deleted",
+  dbCleaned: "Database has been cleaned",
+  token: {
+    accessDenied: "Access denied",
+    invalid: "Invalid token",
+    adminOnly: "Only for admin",
+  },
 };
