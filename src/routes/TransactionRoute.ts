@@ -7,7 +7,7 @@ const transactionRouter = Router();
 const request = new RequestController();
 
 transactionRouter.get("/", async (req: Request, res: Response) =>
-  request.getData<TransactionType>(req, res, Transaction)
+  request.getTransactions<TransactionType>(req, res, Transaction)
 );
 
 export default transactionRouter;

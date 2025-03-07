@@ -30,7 +30,11 @@ export class RequestController {
     return url === "/api/transactions" || url === "/api/users" ? {} : { userId };
   }
 
-  async getData<T>(req: Request, res: Response<ServerResponse<T[]>>, model: Model<T>) {
+  async getTransactions<T>(
+    req: Request,
+    res: Response<ServerResponse<T[]>>,
+    model: Model<T>
+  ) {
     try {
       const limit = req.query.limit ? Number(req.query.limit) : PAGE_COUNT;
       const sort = `field ${req.query.sort ? req.query.sort : "-date"}`;
@@ -39,8 +43,6 @@ export class RequestController {
       const userIdFilter = this.getUserIdFilter(req.baseUrl, req.userId);
 
       const length = (await model.find(userIdFilter)).length;
-
-      console.log(filter);
 
       const data = await model
         .find({ ...filter, ...userIdFilter })
@@ -54,6 +56,16 @@ export class RequestController {
         page: Number(req.query.page) || 1,
         msg: "Ok",
       });
+    } catch (error) {
+      res.send({ msg: MESSAGES.serverError });
+    }
+  }
+
+  async getData<T>(req: Request, res: Response, model: Model<T>) {
+    try {
+      const filter = this.getUserIdFilter(req.baseUrl, req.userId);
+      const data = await model.find(filter);
+      res.status(200).send(data);
     } catch (error) {
       res.send({ msg: MESSAGES.serverError });
     }
