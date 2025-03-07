@@ -68,7 +68,7 @@ export class RequestController {
             from: "transactions",
             localField: "category",
             foreignField: "category",
-            as: "transactions",
+            as: "latest",
             pipeline: [
               {
                 $limit: 3,
