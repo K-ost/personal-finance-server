@@ -17,6 +17,9 @@ export class RequestController {
     if (filter.hasOwnProperty("page")) {
       delete filter.page;
     }
+    if (filter.hasOwnProperty("q")) {
+      delete filter.q;
+    }
     if (filter.hasOwnProperty("sort")) {
       delete filter.sort;
     }
@@ -44,15 +47,19 @@ export class RequestController {
 
       const length = (await model.find(userIdFilter)).length;
 
+      // Search
+      let re = new RegExp(String(req.query.q), "i");
+      const searchFilter = req.query.q ? { name: re } : {};
+
       const data = await model
-        .find({ ...filter, ...userIdFilter })
+        .find({ ...filter, ...userIdFilter, ...searchFilter })
         .sort(sort)
         .skip(skip)
         .limit(limit);
 
       res.status(200).send({
         data,
-        count: filter.category ? data.length : length,
+        count: filter.category || req.query.q ? data.length : length,
         page: Number(req.query.page) || 1,
         msg: "Ok",
       });
