@@ -1,4 +1,4 @@
-export const PAGE_COUNT = 20;
+export const PAGE_COUNT = 10;
 export const TOKEN_KEY = process.env.JWT_KEY || "TOKEN_JWT";
 
 export const FORBIDDEN_USER_IDS = [
