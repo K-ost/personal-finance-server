@@ -41,7 +41,7 @@ export class RequestController {
       const length = (await model.find(userIdFilter)).length;
 
       const data = await model
-        .find({ ...filter })
+        .find({ ...filter, ...userIdFilter })
         .sort(sort)
         .skip(skip)
         .limit(limit);
@@ -57,14 +57,34 @@ export class RequestController {
     }
   }
 
+  async getBudgets<T>(req: Request, res: Response, model: Model<T>) {
+    try {
+      const data = await model.aggregate([
+        {
+          $match: { userId: req.userId },
+        },
+        {
+          $lookup: {
+            from: "transactions",
+            localField: "category",
+            foreignField: "category",
+            as: "transactions",
+            pipeline: [
+              {
+                $limit: 3,
+              },
+            ],
+          },
+        },
+      ]);
+      res.status(200).send(data);
+    } catch (error) {
+      res.send({ msg: MESSAGES.serverError });
+    }
+  }
+
   async postData<T>(req: Request, res: Response<ServerResponse<T>>, model: Model<T>) {
     try {
-      const { name, userId } = req.body;
-      const existed = await model.findOne({ userId, name });
-      if (!!existed) {
-        res.status(403).send({ msg: MESSAGES.entityExists });
-        return;
-      }
       const data = await model.create(req.body);
       res.send({ data, msg: MESSAGES.entityAdded });
     } catch (error) {

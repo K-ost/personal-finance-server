@@ -6,8 +6,8 @@ import { BudgetType } from "../types";
 const budgetRouter = Router();
 const request = new RequestController();
 
-budgetRouter.get("/", async (req: Request, res: Response) => {
-  request.getData<BudgetType>(req, res, Budget);
+budgetRouter.get("/transactions", async (req: Request, res: Response) => {
+  request.getBudgets<BudgetType>(req, res, Budget);
 });
 
 budgetRouter.post(
