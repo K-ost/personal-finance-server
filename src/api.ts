@@ -33,12 +33,14 @@ export class RequestController {
   async getData<T>(req: Request, res: Response<ServerResponse<T[]>>, model: Model<T>) {
     try {
       const limit = req.query.limit ? Number(req.query.limit) : PAGE_COUNT;
-      const sort = `field ${req.query.sort ? req.query.sort : "date"}`;
+      const sort = `field ${req.query.sort ? req.query.sort : "-date"}`;
       const skip = this.getCurrentPage(limit, Number(req.query.page) || 1);
       const filter = this.getFilters(req);
       const userIdFilter = this.getUserIdFilter(req.baseUrl, req.userId);
 
       const length = (await model.find(userIdFilter)).length;
+
+      console.log(filter);
 
       const data = await model
         .find({ ...filter, ...userIdFilter })
@@ -48,7 +50,7 @@ export class RequestController {
 
       res.status(200).send({
         data,
-        count: length,
+        count: filter.category ? data.length : length,
         page: Number(req.query.page) || 1,
         msg: "Ok",
       });
@@ -69,11 +71,7 @@ export class RequestController {
             localField: "category",
             foreignField: "category",
             as: "latest",
-            pipeline: [
-              {
-                $limit: 3,
-              },
-            ],
+            pipeline: [{ $limit: 3 }],
           },
         },
       ]);
