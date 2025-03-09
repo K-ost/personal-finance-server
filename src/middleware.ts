@@ -20,10 +20,10 @@ const verifyToken = (
   if (!token) res.status(401).send({ msg: MESSAGES.token.accessDenied });
   if (token) {
     jwt.verify(token, TOKEN_KEY, (err, decoded: any) => {
-      if (err) return res.status(403).send({ msg: MESSAGES.token.invalid });
+      if (err) return res.status(401).send({ msg: MESSAGES.token.invalid });
       req.userId = decoded.userId;
       if (role === "admin" && decoded.role !== "admin") {
-        return res.status(403).send({ msg: MESSAGES.token.adminOnly });
+        return res.status(401).send({ msg: MESSAGES.token.adminOnly });
       }
       next();
     });

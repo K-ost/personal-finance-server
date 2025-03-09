@@ -18,5 +18,6 @@ export const MESSAGES = {
     accessDenied: "Access denied",
     invalid: "Invalid token",
     adminOnly: "Only for admin",
+    relevant: "Token is relevant",
   },
 };

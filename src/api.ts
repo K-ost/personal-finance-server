@@ -129,7 +129,7 @@ export class RequestController {
     }
   }
 
-  async clearAll(req: Request, res: Response<ServerResponse<any>>) {
+  async clearAll(res: Response<ServerResponse<any>>) {
     try {
       const filter = { $nin: FORBIDDEN_USER_IDS };
       await Budget.deleteMany({ userId: filter });

@@ -10,7 +10,7 @@ import authRouter from "./routes/authRouter";
 import sighUpRouter from "./routes/signUpRouter";
 import userRouter from "./routes/UserRoute";
 import { VerifyToken } from "./middleware";
-import { RequestController } from "./api";
+import dbRouter from "./routes/dbRouter";
 
 // Server settings
 dotenv.config();
@@ -20,7 +20,6 @@ server.set("json spaces", 2);
 server.use(bodyParser.json());
 server.use(cors());
 const verifyToken = new VerifyToken();
-const requestController = new RequestController();
 
 // Main route
 server.get("/", (__, res: Response) => {
@@ -34,7 +33,7 @@ server.use("/api/pots", verifyToken.userAccess, potRouter);
 server.use("/api/users", verifyToken.adminAccess, userRouter);
 server.use("/api/signup", sighUpRouter);
 server.use("/api/login", authRouter);
-server.use("/api/clear", verifyToken.adminAccess, requestController.clearAll);
+server.use("/api/clear", verifyToken.adminAccess, dbRouter);
 
 // Running server
 server.listen(PORT, async () => {

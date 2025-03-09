@@ -27,7 +27,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
       { email, password, role: user.role, userId: user._id },
       TOKEN_KEY,
       {
-        expiresIn: "1h",
+        expiresIn: "30m",
       }
     );
 
