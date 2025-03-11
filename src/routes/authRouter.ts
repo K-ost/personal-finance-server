@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../schemas/User";
 import { LoginResponse } from "../types";
-import { MESSAGES, TOKEN_KEY, TOKEN_TIME } from "../constants";
+import { MESSAGES, TOKEN_TIME } from "../constants";
+import { TOKEN_KEY } from "../middleware";
 
 const authRouter = Router();
 
@@ -25,7 +26,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
     // Generating access token
     const accessToken = jwt.sign(
       { email, password, role: user.role, userId: user._id },
-      TOKEN_KEY,
+      TOKEN_KEY!,
       {
         expiresIn: TOKEN_TIME,
       }

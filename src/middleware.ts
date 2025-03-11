@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { MESSAGES, TOKEN_KEY } from "./constants";
+import dotenv from "dotenv";
+import { MESSAGES } from "./constants";
 import { getToken } from "./utils";
 import { RoleType } from "./types";
 
@@ -10,6 +11,9 @@ declare module "express-serve-static-core" {
   }
 }
 
+dotenv.config();
+export const TOKEN_KEY = process.env.JWT_KEY;
+
 const verifyToken = (
   req: Request,
   res: Response,
@@ -18,7 +22,7 @@ const verifyToken = (
 ): void => {
   const token = getToken(req);
   if (!token) res.status(401).send({ msg: MESSAGES.token.accessDenied });
-  if (token) {
+  if (token && TOKEN_KEY) {
     jwt.verify(token, TOKEN_KEY, (err, decoded: any) => {
       if (err) {
         res.sendStatus(401);
