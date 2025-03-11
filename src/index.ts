@@ -11,6 +11,7 @@ import sighUpRouter from "./routes/signUpRouter";
 import userRouter from "./routes/UserRoute";
 import { VerifyToken } from "./middleware";
 import dbRouter from "./routes/dbRouter";
+import tokenRouter from "./routes/tokenRouter";
 
 // Server settings
 dotenv.config();
@@ -34,6 +35,7 @@ server.use("/api/users", verifyToken.adminAccess, userRouter);
 server.use("/api/signup", sighUpRouter);
 server.use("/api/login", authRouter);
 server.use("/api/clear", verifyToken.adminAccess, dbRouter);
+server.use("/api/token", verifyToken.userAccess, tokenRouter);
 
 // Running server
 server.listen(PORT, async () => {
