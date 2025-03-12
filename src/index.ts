@@ -24,7 +24,10 @@ const verifyToken = new VerifyToken();
 
 // Main route
 server.get("/", (__, res: Response) => {
-  res.sendFile(__dirname + "/index.html");
+  res.send(`
+    <h1>Server</h1>
+    <p>There will be API for personal finance application.</p>
+  `);
 });
 
 // Routes
