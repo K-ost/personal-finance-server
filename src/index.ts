@@ -43,10 +43,7 @@ server.use("/api/token", verifyToken.userAccess, tokenRouter);
 // Running server
 server.listen(PORT, async () => {
   console.log(`Server is running at http://localhost:${PORT}`);
-  await mongoose.connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.s9jj6.mongodb.net/`,
-    {
-      dbName: "finances",
-    }
-  );
+  await mongoose.connect(`${process.env.DB_URL}`, {
+    dbName: "finances",
+  });
 });
