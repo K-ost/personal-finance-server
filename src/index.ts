@@ -12,6 +12,7 @@ import userRouter from "./routes/UserRoute";
 import { VerifyToken } from "./middleware";
 import dbRouter from "./routes/dbRouter";
 import tokenRouter from "./routes/tokenRouter";
+import balanceRouter from "./routes/balanceRouter";
 
 // Server settings
 dotenv.config();
@@ -34,6 +35,7 @@ server.get("/", (__, res: Response) => {
 server.use("/api/transactions", verifyToken.userAccess, transactionRouter);
 server.use("/api/budgets", verifyToken.userAccess, budgetRouter);
 server.use("/api/pots", verifyToken.userAccess, potRouter);
+server.use("/api/balance", verifyToken.userAccess, balanceRouter);
 server.use("/api/users", verifyToken.adminAccess, userRouter);
 server.use("/api/signup", sighUpRouter);
 server.use("/api/login", authRouter);

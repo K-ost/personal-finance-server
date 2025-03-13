@@ -2,7 +2,6 @@ export type BalanceType = {
   current: number;
   income: number;
   expenses: number;
-  userId: string;
 };
 
 export type TransactionType = {
