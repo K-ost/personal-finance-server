@@ -44,7 +44,7 @@ export type UserType = {
 
 export type LoginResponse = {
   accessToken: string;
-  user: Omit<UserType, "password">;
+  user: UserType;
 };
 
 export type ServerResponse<T> = {

@@ -34,13 +34,7 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
 
     const output: LoginResponse = {
       accessToken,
-      user: {
-        avatar: user.avatar,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        _id: user.id,
-      },
+      user,
     };
     return res.status(201).send(output);
   } catch (error) {
