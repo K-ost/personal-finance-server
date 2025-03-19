@@ -10,13 +10,14 @@ const authRouter = Router();
 
 authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(403).send({ msg: "User doesn't exist" });
     }
 
-    const matchedPass = bcrypt.compareSync(req.body.password, user.password);
+    const matchedPass = bcrypt.compareSync(password, user.password);
 
     if (!matchedPass) {
       return res.status(403).send({ msg: "Incorrect password" });
@@ -24,23 +25,22 @@ authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
 
     // Generating access token
     const accessToken = jwt.sign(
-      {
-        email: req.body.email,
-        password: req.body.password,
-        role: user.role,
-        userId: user._id,
-      },
+      { email, password, role: user.role, userId: user._id },
       TOKEN_KEY!,
       {
         expiresIn: TOKEN_TIME,
       }
     );
 
-    const { password, ...withoutPass } = user;
-
     const output: LoginResponse = {
       accessToken,
-      user: withoutPass,
+      user: {
+        avatar: user.avatar,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        _id: user._id,
+      },
     };
     return res.status(201).send(output);
   } catch (error) {
