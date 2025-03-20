@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Model } from "mongoose";
-import bcrypt from "bcryptjs";
 import { FORBIDDEN_USER_IDS, MESSAGES, PAGE_COUNT } from "./constants";
 import { Pot } from "./schemas/Pot";
 import { Budget } from "./schemas/Budget";
@@ -112,11 +111,6 @@ export class RequestController {
 
   async editData<T>(req: Request, res: Response<ServerResponse<T>>, model: Model<T>) {
     try {
-      // if user changes a password
-      if (req.body.password) {
-        const hashedPass = bcrypt.hashSync(req.body.password, 7);
-        req.body.password = hashedPass;
-      }
       const data = await model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       });

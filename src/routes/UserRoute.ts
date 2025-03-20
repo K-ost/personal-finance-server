@@ -1,8 +1,10 @@
 import { Request, Response, Router } from "express";
+import { body, Result, validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
 import { RequestController } from "../api";
 import { UserType } from "../types";
 import { User } from "../schemas/User";
-import { body, Result, validationResult } from "express-validator";
+import { MESSAGES } from "../constants";
 
 const userRouter = Router();
 const request = new RequestController();
@@ -21,13 +23,35 @@ userRouter.patch(
       .withMessage("Password must contain at least 6 characters"),
   ],
   async (req: Request, res: Response): Promise<void> => {
-    const result: Result = validationResult(req);
-    const errors = result.array();
-    if (errors.length) {
-      res.status(403).send({ errors });
-      return;
+    try {
+      const result: Result = validationResult(req);
+      const errors = result.array();
+
+      if (errors.length) {
+        res.status(403).send({ errors });
+        return;
+      }
+
+      if (req.body.password) {
+        const hashedPass = bcrypt.hashSync(req.body.password, 7);
+        req.body.password = hashedPass;
+      }
+
+      const data = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      const user: Omit<UserType, "password"> = {
+        avatar: data!.avatar,
+        email: data!.email,
+        role: data!.role,
+        name: data!.name,
+        _id: data!._id,
+      };
+
+      res.status(201).send({ data: user, msg: MESSAGES.entityEdited });
+    } catch (error) {
+      res.send({ msg: MESSAGES.serverError });
     }
-    request.editData<UserType>(req, res, User);
   }
 );
 
