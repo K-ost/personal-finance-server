@@ -16,6 +16,7 @@ userRouter.patch(
   [
     body("password")
       .trim()
+      .optional()
       .isLength({ min: 6 })
       .withMessage("Password must contain at least 6 characters"),
   ],
