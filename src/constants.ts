@@ -1,10 +1,7 @@
 export const PAGE_COUNT = 10;
 export const TOKEN_TIME = "30m";
 
-export const FORBIDDEN_USER_IDS = [
-  "67c696b7d7669c26105a3487",
-  "67c728a3240f539a39e44ff7",
-];
+export const FORBIDDEN_USER_IDS = ["67e19a61dee623657a012ec7"];
 
 export const MESSAGES = {
   serverError: "Server error",
