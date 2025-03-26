@@ -36,7 +36,7 @@ server.use("/api/transactions", verifyToken.userAccess, transactionRouter);
 server.use("/api/budgets", verifyToken.userAccess, budgetRouter);
 server.use("/api/pots", verifyToken.userAccess, potRouter);
 server.use("/api/balance", verifyToken.userAccess, balanceRouter);
-server.use("/api/users", verifyToken.adminAccess, userRouter);
+server.use("/api/users", userRouter);
 server.use("/api/signup", sighUpRouter);
 server.use("/api/login", authRouter);
 server.use("/api/clear", verifyToken.adminAccess, dbRouter);

@@ -17,4 +17,6 @@ export const MESSAGES = {
     adminOnly: "Only for admin",
     relevant: "Token is relevant",
   },
+  passChanged: "Password has been changed",
+  passIncorrect: "Incorrect password",
 };
