@@ -18,7 +18,6 @@ export type BudgetType = {
   category: string;
   maximum: number;
   theme: string;
-  userId: string;
   _id?: string;
 };
 
@@ -27,24 +26,14 @@ export type PotType = {
   target: number;
   total: number;
   theme: string;
-  userId: string;
   _id?: string;
 };
 
 export type RoleType = "admin" | "user";
 
-export type UserType = {
+export type User = {
   email: string;
   password: string;
-  name: string;
-  role: RoleType;
-  avatar: string;
-  _id?: string;
-};
-
-export type LoginResponse = {
-  accessToken: string;
-  user: Omit<UserType, "password">;
 };
 
 export type ServerResponse<T> = {

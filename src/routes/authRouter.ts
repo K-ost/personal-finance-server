@@ -1,51 +1,9 @@
-import { Request, Response, Router } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { User } from "../schemas/User";
-import { LoginResponse } from "../types";
-import { MESSAGES, TOKEN_TIME } from "../constants";
-import { TOKEN_KEY } from "../middleware";
+import { Router } from "express";
+import authController from "../controllers/authController";
 
 const authRouter = Router();
 
-authRouter.post("/", async (req: Request, res: Response): Promise<any> => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(403).send({ msg: "User doesn't exist" });
-    }
-
-    const matchedPass = bcrypt.compareSync(password, user.password);
-
-    if (!matchedPass) {
-      return res.status(403).send({ msg: "Incorrect password" });
-    }
-
-    // Generating access token
-    const accessToken = jwt.sign(
-      { email, password, role: user.role, userId: user._id },
-      TOKEN_KEY!,
-      {
-        expiresIn: TOKEN_TIME,
-      }
-    );
-
-    const output: LoginResponse = {
-      accessToken,
-      user: {
-        avatar: user.avatar,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        _id: user._id,
-      },
-    };
-    return res.status(201).send(output);
-  } catch (error) {
-    res.status(500).send({ msg: MESSAGES.serverError });
-  }
-});
+authRouter.post("/login", authController.login);
+authRouter.get("/balance", authController.getBalance);
 
 export default authRouter;
