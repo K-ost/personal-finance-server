@@ -2,36 +2,17 @@ import { Request, Response } from "express";
 import { ServerResponse, TransactionType } from "../types";
 import { Transaction } from "../schemas/Transaction";
 import { MESSAGES } from "../constants";
+import { getCurrentPage, getFilters } from "../services/utils";
 
 class TransactionController {
-  private getCurrentPage(pageCount: number, page: number): number {
-    const current = page || 1;
-    return pageCount * (current - 1);
-  }
-
-  private getFilters(req: Request): any {
-    const filter = { ...req.query };
-    if (filter.hasOwnProperty("page")) {
-      delete filter.page;
-    }
-    if (filter.hasOwnProperty("q")) {
-      delete filter.q;
-    }
-    if (filter.hasOwnProperty("sort")) {
-      delete filter.sort;
-    }
-    if (filter.hasOwnProperty("limit")) {
-      delete filter.limit;
-    }
-    return filter;
-  }
-
   async getTransactions(req: Request, res: Response<ServerResponse<TransactionType[]>>) {
     try {
       const limit = req.query.limit ? Number(req.query.limit) : 10;
       const sort = `field ${req.query.sort ? req.query.sort : "-date"}`;
-      const skip = this.getCurrentPage(limit, Number(req.query.page) || 1);
-      const filter = this.getFilters(req);
+      const skip = getCurrentPage(limit, Number(req.query.page) || 1);
+      const filter = getFilters(req);
+
+      const length = (await Transaction.find()).length;
 
       // Search
       let re = new RegExp(String(req.query.q), "i");
@@ -49,7 +30,16 @@ class TransactionController {
         msg: "Ok",
       });
     } catch (error) {
-      res.send({ msg: MESSAGES.serverError });
+      res.status(500).send({ msg: MESSAGES.serverError });
+    }
+  }
+
+  async getRecurringBills(req: Request, res: Response) {
+    try {
+      const data = await Transaction.find({ recurring: true });
+      res.status(200).send({ data, msg: "Ok" });
+    } catch (error) {
+      res.status(500).send({ msg: MESSAGES.serverError });
     }
   }
 }
