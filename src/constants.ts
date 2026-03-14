@@ -8,4 +8,6 @@ export const MESSAGES = {
   entityDeleted: "The entity has been deleted",
   emailIncorrect: "Incorrect email",
   passIncorrect: "Incorrect password",
+  defaultEntity:
+    "This entity either does not exist or is a default and cannot be modified or deleted. Try creating a new one.",
 };

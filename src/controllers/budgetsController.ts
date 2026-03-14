@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Budget } from "../schemas/Budget";
 import { MESSAGES } from "../constants";
+import { BudgetType } from "../types";
 
 class BudgetsController {
   async getBudgets(req: Request, res: Response) {
@@ -18,36 +19,50 @@ class BudgetsController {
       ]);
       res.status(200).send(data);
     } catch (error) {
-      res.send({ msg: MESSAGES.serverError });
+      res.status(500).send({ msg: MESSAGES.serverError });
     }
   }
 
   async addBudget(req: Request, res: Response) {
     try {
-      const data = await Budget.create(req.body);
-      res.send({ data, msg: MESSAGES.entityAdded });
+      const newBudget: BudgetType = { ...req.body, isDefault: false };
+      const data = await Budget.create(newBudget);
+      res.status(200).send({ data, msg: MESSAGES.entityAdded });
     } catch (error) {
-      res.send({ msg: MESSAGES.serverError });
+      res.status(500).send({ msg: MESSAGES.serverError });
     }
   }
 
   async editBudget(req: Request, res: Response) {
     try {
-      const data = await Budget.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      });
-      res.status(201).send({ data: data!, msg: MESSAGES.entityEdited });
+      const data = await Budget.findOneAndUpdate(
+        { _id: req.params.id, isDefault: false },
+        req.body,
+        { new: true },
+      );
+      if (!data) {
+        res.status(403).send({ msg: MESSAGES.defaultEntity });
+        return;
+      }
+      res.status(200).send({ data, msg: MESSAGES.entityEdited });
     } catch (error) {
-      res.send({ msg: MESSAGES.serverError });
+      res.status(500).send({ msg: MESSAGES.serverError });
     }
   }
 
   async deleteBudget(req: Request, res: Response) {
     try {
-      await Budget.deleteOne({ _id: req.params.id });
-      res.send({ msg: MESSAGES.entityDeleted });
+      const data = await Budget.findOneAndDelete({
+        _id: req.params.id,
+        isDefault: false,
+      });
+      if (!data) {
+        res.status(403).send({ msg: MESSAGES.defaultEntity });
+        return;
+      }
+      res.status(200).send({ msg: MESSAGES.entityDeleted });
     } catch (error) {
-      res.send({ msg: MESSAGES.serverError });
+      res.status(500).send({ msg: MESSAGES.serverError });
     }
   }
 }

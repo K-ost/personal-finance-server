@@ -18,6 +18,7 @@ export type BudgetType = {
   category: string;
   maximum: number;
   theme: string;
+  isDefault?: boolean;
   _id?: string;
 };
 
@@ -26,6 +27,7 @@ export type PotType = {
   target: number;
   total: number;
   theme: string;
+  isDefault?: boolean;
   _id?: string;
 };
 
