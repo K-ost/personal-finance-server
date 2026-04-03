@@ -33,9 +33,10 @@ export type PotType = {
 
 export type RoleType = "admin" | "user";
 
-export type User = {
+export type UserType = {
   email: string;
   password: string;
+  name: string;
 };
 
 export type ServerResponse<T> = {
