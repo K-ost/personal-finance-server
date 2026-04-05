@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export type BalanceType = {
   current: number;
   income: number;
@@ -33,15 +35,21 @@ export type PotType = {
 
 export type RoleType = "admin" | "user";
 
-export type UserType = {
-  email: string;
-  password: string;
-  name: string;
-};
-
 export type ServerResponse<T> = {
   data?: T;
   count?: number;
   page?: number;
   msg?: string;
 };
+
+export type UserType = {
+  email: string;
+  password: string;
+  name: string;
+};
+
+export type UserServer = UserType & {
+  _id: Types.ObjectId;
+};
+
+export type UserDTO = Pick<UserServer, "_id" | "email" | "name">;

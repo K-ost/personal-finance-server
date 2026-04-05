@@ -10,4 +10,10 @@ export const MESSAGES = {
   passIncorrect: "Incorrect password",
   defaultEntity:
     "This entity either does not exist or is a default and cannot be modified or deleted. Try creating a new one.",
+  noUser: "User with this e-mail doesn't exist",
+  userRegistered: "User has been registered",
+};
+
+export const OPTIONS = {
+  refreshAge: 1 * 24 * 60 * 60 * 1000,
 };
