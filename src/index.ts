@@ -4,6 +4,7 @@ import express, { Express } from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRouter";
 import transactionRouter from "./routes/transactionRouter";
 import budgetsRouter from "./routes/budgetsRouter";
@@ -14,7 +15,12 @@ const server: Express = express();
 const PORT = process.env.PORT || 8000;
 server.set("json spaces", 2);
 server.use(bodyParser.json());
-server.use(cors());
+server.use(
+  cors({
+    origin: "https://personal-finance-server.onrender.com/",
+  }),
+);
+server.use(cookieParser());
 
 // Routes
 server.use("/api", transactionRouter);
