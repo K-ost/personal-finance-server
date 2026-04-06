@@ -15,10 +15,12 @@ const server: Express = express();
 const PORT = process.env.PORT || 8000;
 server.set("json spaces", 2);
 server.use(bodyParser.json());
+server.use(express.json());
 server.use(cookieParser());
 server.use(
   cors({
     credentials: true,
+    origin: ["*"],
   }),
 );
 

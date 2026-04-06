@@ -49,10 +49,10 @@ class AuthController {
       const accessToken = jwt.sign(userDTO, process.env.ACCESS_TOKEN as string);
       const refreshToken = jwt.sign(userDTO, process.env.REFRESH_TOKEN as string);
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        maxAge: OPTIONS.refreshAge,
-      });
+      // res.cookie("refreshToken", refreshToken, {
+      //   httpOnly: true,
+      //   maxAge: OPTIONS.refreshAge,
+      // });
 
       res.status(201).send({ accessToken, user: userDTO });
     } catch (error) {
