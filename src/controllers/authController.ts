@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { UserType } from "../types";
 import { MESSAGES, OPTIONS } from "../constants";
 import { User } from "../schemas/User";
 import { getUserDTO } from "../services/utils";
+import tokenService from "../services/tokenService";
 
 class AuthController {
   async register(req: Request<{}, {}, UserType>, res: Response) {
@@ -48,12 +48,7 @@ class AuthController {
       }
 
       const userDTO = getUserDTO(user);
-      const accessToken = jwt.sign({ ...userDTO }, process.env.ACCESS_TOKEN as string, {
-        expiresIn: "5m",
-      });
-      const refreshToken = jwt.sign({ ...userDTO }, process.env.REFRESH_TOKEN as string, {
-        expiresIn: "1d",
-      });
+      const { accessToken, refreshToken } = tokenService.generateTokens(userDTO);
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,

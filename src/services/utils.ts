@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { UserDTO, UserServer, UserType } from "../types";
+import { UserDTO, UserServer } from "../types";
 
 export function getCurrentPage(pageCount: number, page: number): number {
   const current = page || 1;
@@ -24,5 +24,5 @@ export function getFilters(req: Request) {
 }
 
 export function getUserDTO(user: UserServer): UserDTO {
-  return { _id: user._id, email: user.email, name: user.name };
+  return { id: user._id, email: user.email, name: user.name };
 }

@@ -52,4 +52,4 @@ export type UserServer = UserType & {
   _id: Types.ObjectId;
 };
 
-export type UserDTO = Pick<UserServer, "_id" | "email" | "name">;
+export type UserDTO = { id: Types.ObjectId } & Pick<UserType, "email" | "name">;
