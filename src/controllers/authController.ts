@@ -48,19 +48,19 @@ class AuthController {
       }
 
       const userDTO = getUserDTO(user);
-      // const accessToken = jwt.sign({ ...userDTO }, process.env.ACCESS_TOKEN as string, {
-      //   expiresIn: "5m",
-      // });
-      // const refreshToken = jwt.sign({ ...userDTO }, process.env.REFRESH_TOKEN as string, {
-      //   expiresIn: "1d",
-      // });
+      const accessToken = jwt.sign({ ...userDTO }, process.env.ACCESS_TOKEN as string, {
+        expiresIn: "5m",
+      });
+      const refreshToken = jwt.sign({ ...userDTO }, process.env.REFRESH_TOKEN as string, {
+        expiresIn: "1d",
+      });
 
-      // res.cookie("refreshToken", refreshToken, {
-      //   httpOnly: true,
-      //   maxAge: OPTIONS.refreshAge,
-      // });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: OPTIONS.refreshAge,
+      });
 
-      res.status(201).send({ accessToken: "token", user: userDTO });
+      res.status(201).send({ accessToken, user: userDTO });
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
     }
