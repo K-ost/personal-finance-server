@@ -33,8 +33,6 @@ export type PotType = {
   _id?: string;
 };
 
-export type RoleType = "admin" | "user";
-
 export type ServerResponse<T> = {
   data?: T;
   count?: number;
@@ -42,14 +40,15 @@ export type ServerResponse<T> = {
   msg?: string;
 };
 
+export type RoleType = "admin" | "user";
+
 export type UserType = {
   email: string;
   password: string;
   name: string;
+  role: "admin" | "user";
 };
 
 export type UserServer = UserType & {
   _id: Types.ObjectId;
 };
-
-export type UserDTO = { id: Types.ObjectId } & Pick<UserType, "email" | "name">;

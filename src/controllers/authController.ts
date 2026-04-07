@@ -3,8 +3,8 @@ import bcrypt from "bcryptjs";
 import { UserType } from "../types";
 import { MESSAGES, OPTIONS } from "../constants";
 import { User } from "../schemas/User";
-import { getUserDTO } from "../services/utils";
 import tokenService from "../services/tokenService";
+import UserDTO from "../services/UserDto";
 
 class AuthController {
   async register(req: Request<{}, {}, UserType>, res: Response) {
@@ -21,6 +21,7 @@ class AuthController {
         email,
         name,
         password: bcrypt.hashSync(password, 7),
+        role: "user",
       };
 
       await User.create(newUser);
@@ -47,7 +48,7 @@ class AuthController {
         return;
       }
 
-      const userDTO = getUserDTO(user);
+      const userDTO = new UserDTO(user);
       const { accessToken, refreshToken } = tokenService.generateTokens(userDTO);
 
       res.cookie("refreshToken", refreshToken, {

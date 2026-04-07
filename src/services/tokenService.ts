@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UserDTO } from "../types";
+import UserDTO from "./UserDto";
 
 type TokensReturn = {
   accessToken: string;
