@@ -20,8 +20,8 @@ export type BudgetType = {
   category: string;
   maximum: number;
   theme: string;
-  isDefault?: boolean;
-  _id?: string;
+  userId: Types.ObjectId;
+  _id?: Types.ObjectId;
 };
 
 export type PotType = {
@@ -29,8 +29,8 @@ export type PotType = {
   target: number;
   total: number;
   theme: string;
-  isDefault?: boolean;
-  _id?: string;
+  userId: Types.ObjectId;
+  _id?: Types.ObjectId;
 };
 
 export type ServerResponse<T> = {

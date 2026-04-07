@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { MESSAGES } from "../constants";
 import { Pot } from "../schemas/Pot";
 import { PotType } from "../types";
+import { Types } from "mongoose";
 
 class PotsController {
   async getPots(req: Request, res: Response) {
     try {
-      const data = await Pot.find();
+      const data = await Pot.find({ userId: req.query.userId });
       res.status(200).send(data);
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
@@ -15,7 +16,11 @@ class PotsController {
 
   async addPot(req: Request<{}, {}, PotType>, res: Response) {
     try {
-      const newPot: PotType = { ...req.body, isDefault: false };
+      const newPot: PotType = {
+        ...req.body,
+        userId: new Types.ObjectId(req.body.userId),
+      };
+
       const data = await Pot.create(newPot);
       res.send({ data, msg: MESSAGES.entityAdded });
     } catch (error) {
@@ -25,11 +30,9 @@ class PotsController {
 
   async editPot(req: Request, res: Response) {
     try {
-      const data = await Pot.findOneAndUpdate(
-        { _id: req.params.id, isDefault: false },
-        req.body,
-        { new: true },
-      );
+      const data = await Pot.findOneAndUpdate({ _id: req.params.id }, req.body, {
+        new: true,
+      });
 
       if (!data) {
         res.status(403).send({ msg: MESSAGES.defaultEntity });
@@ -44,11 +47,15 @@ class PotsController {
 
   async deletePot(req: Request, res: Response) {
     try {
-      const data = await Pot.findOneAndDelete({ _id: req.params.id, isDefault: false });
+      const data = await Pot.findOneAndDelete({
+        _id: req.params.id,
+      });
+
       if (!data) {
         res.status(403).send({ msg: MESSAGES.defaultEntity });
         return;
       }
+
       res.send({ msg: MESSAGES.entityDeleted });
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });

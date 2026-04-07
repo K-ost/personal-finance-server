@@ -6,7 +6,7 @@ const potSchema = new Schema<PotType>({
   target: { type: Number, required: true },
   theme: { type: String, required: true },
   total: { type: Number, required: true },
-  isDefault: { type: Boolean },
+  userId: { type: Schema.Types.ObjectId, required: true },
 });
 
 export const Pot = model("Pot", potSchema);
