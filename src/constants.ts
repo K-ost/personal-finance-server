@@ -12,6 +12,10 @@ export const MESSAGES = {
     "This entity either does not exist or is a default and cannot be modified or deleted. Try creating a new one.",
   noUser: "User with this e-mail doesn't exist",
   userRegistered: "User has been registered",
+  auth: {
+    noAuth: "No authorization",
+    noToken: "Invalid token",
+  },
 };
 
 export const OPTIONS = {

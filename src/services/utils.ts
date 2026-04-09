@@ -1,5 +1,4 @@
 import { Request } from "express";
-import { UserServer } from "../types";
 
 export function getCurrentPage(pageCount: number, page: number): number {
   const current = page || 1;
