@@ -15,6 +15,7 @@ export const MESSAGES = {
   auth: {
     noAuth: "No authorization",
     noToken: "Invalid token",
+    logout: "Logout",
   },
 };
 

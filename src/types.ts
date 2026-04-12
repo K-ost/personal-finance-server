@@ -33,6 +33,11 @@ export type PotType = {
   _id?: Types.ObjectId;
 };
 
+export type SessionType = {
+  token: string;
+  userId: Types.ObjectId;
+};
+
 export type ServerResponse<T> = {
   data?: T;
   count?: number;

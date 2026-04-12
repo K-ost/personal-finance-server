@@ -5,9 +5,16 @@ import { MESSAGES, OPTIONS } from "../constants";
 import { User } from "../schemas/User";
 import tokenService from "../services/tokenService";
 import UserDTO from "../services/UserDto";
+import { Session } from "../schemas/Session";
 
-class AuthController {
-  async register(req: Request<{}, {}, UserType>, res: Response) {
+interface IAuthController {
+  register(req: Request<{}, {}, UserType>, res: Response): Promise<void>;
+  login(req: Request<{}, {}, Omit<UserType, "name">>, res: Response): Promise<void>;
+  logout(req: Request, res: Response): Promise<void>;
+}
+
+class AuthController implements IAuthController {
+  async register(req: Request<{}, {}, UserType>, res: Response): Promise<void> {
     try {
       const { email, name, password } = req.body;
 
@@ -32,7 +39,10 @@ class AuthController {
     }
   }
 
-  async login(req: Request<{}, {}, Omit<UserType, "name">>, res: Response) {
+  async login(
+    req: Request<{}, {}, Omit<UserType, "name">>,
+    res: Response,
+  ): Promise<void> {
     try {
       const { email, password } = req.body;
 
@@ -51,12 +61,30 @@ class AuthController {
       const userDTO = new UserDTO(user);
       const { accessToken, refreshToken } = tokenService.generateTokens(userDTO);
 
+      await Session.create({ token: refreshToken, userId: user._id });
+
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         maxAge: OPTIONS.refreshAge,
       });
 
       res.status(201).send({ accessToken, user: userDTO });
+    } catch (error) {
+      res.status(500).send({ msg: MESSAGES.serverError });
+    }
+  }
+
+  async logout(req: Request, res: Response): Promise<void> {
+    try {
+      const refreshToken = req.cookies["refreshToken"];
+      if (!refreshToken) {
+        res.status(400).send({ msg: MESSAGES.auth.noToken });
+        return;
+      }
+
+      await Session.deleteOne({ token: refreshToken });
+      res.clearCookie("refreshToken");
+      res.send({ msg: MESSAGES.auth.logout });
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
     }
