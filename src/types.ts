@@ -56,4 +56,5 @@ export type UserType = {
 
 export type UserServer = UserType & {
   _id: Types.ObjectId;
+  id?: Types.ObjectId;
 };

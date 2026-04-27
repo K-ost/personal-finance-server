@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import { UserType } from "../types";
+import jwt from "jsonwebtoken";
+import { UserServer, UserType } from "../types";
 import { MESSAGES, OPTIONS } from "../constants";
 import { User } from "../schemas/User";
 import tokenService from "../services/tokenService";
@@ -11,6 +12,7 @@ interface IAuthController {
   register(req: Request<{}, {}, UserType>, res: Response): Promise<void>;
   login(req: Request<{}, {}, Omit<UserType, "name">>, res: Response): Promise<void>;
   refresh(req: Request, res: Response): Promise<void>;
+  logout(req: Request, res: Response): Promise<void>;
 }
 
 class AuthController implements IAuthController {
@@ -78,7 +80,7 @@ class AuthController implements IAuthController {
     try {
       const refreshToken = req.cookies["refreshToken"];
       if (!refreshToken) {
-        res.status(400).send({ msg: MESSAGES.auth.noToken });
+        res.status(400).send({ msg: MESSAGES.auth.noAuth });
         return;
       }
 
@@ -87,6 +89,46 @@ class AuthController implements IAuthController {
         res.status(401).send({ msg: MESSAGES.auth.noAuth });
         return;
       }
+
+      try {
+        const isTokenValid = jwt.verify(
+          refreshToken,
+          process.env.REFRESH_TOKEN as string,
+        );
+
+        const userDTO = new UserDTO(isTokenValid as UserServer);
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+          tokenService.generateTokens(userDTO);
+
+        await Session.findOneAndUpdate(
+          { token: refreshToken },
+          { token: newRefreshToken, userId: userDTO.id },
+        );
+
+        res.cookie("refreshToken", newRefreshToken, {
+          httpOnly: true,
+          maxAge: OPTIONS.refreshAge,
+        });
+        res.status(200).send({ accessToken: newAccessToken, user: userDTO });
+      } catch (error) {
+        res.status(401).send({ msg: MESSAGES.auth.expired });
+      }
+    } catch (error) {
+      res.status(500).send({ msg: MESSAGES.serverError });
+    }
+  }
+
+  async logout(req: Request, res: Response): Promise<void> {
+    try {
+      const refreshToken = req.cookies["refreshToken"];
+      if (!refreshToken) {
+        res.status(400).send({ msg: MESSAGES.auth.noToken });
+        return;
+      }
+
+      await Session.deleteOne({ token: refreshToken });
+      res.clearCookie("refreshToken");
+      res.send({ msg: MESSAGES.auth.logout });
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
     }

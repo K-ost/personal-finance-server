@@ -16,6 +16,7 @@ export const MESSAGES = {
     noAuth: "No authorization",
     noToken: "Invalid token",
     logout: "Logout",
+    expired: "Session expired",
   },
 };
 
