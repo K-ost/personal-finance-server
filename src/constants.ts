@@ -1,3 +1,5 @@
+import { CookieOptions } from "express";
+
 export const PAGE_COUNT = 10;
 
 export const MESSAGES = {
@@ -22,4 +24,13 @@ export const MESSAGES = {
 
 export const OPTIONS = {
   refreshAge: 1 * 24 * 60 * 60 * 1000,
+};
+
+const isProd = process.env.NODE_ENV === "production";
+
+export const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  maxAge: OPTIONS.refreshAge,
+  sameSite: isProd ? "none" : "lax",
+  secure: isProd,
 };

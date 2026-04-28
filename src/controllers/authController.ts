@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { UserServer, UserType } from "../types";
-import { MESSAGES, OPTIONS } from "../constants";
+import { MESSAGES, cookieOptions } from "../constants";
 import { User } from "../schemas/User";
 import tokenService from "../services/tokenService";
 import UserDTO from "../services/UserDto";
@@ -65,11 +65,7 @@ class AuthController implements IAuthController {
 
       await Session.create({ token: refreshToken, userId: user._id });
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        maxAge: OPTIONS.refreshAge,
-      });
-
+      res.cookie("refreshToken", refreshToken, cookieOptions);
       res.status(201).send({ accessToken, user: userDTO });
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
@@ -105,10 +101,7 @@ class AuthController implements IAuthController {
           { token: newRefreshToken, userId: userDTO.id },
         );
 
-        res.cookie("refreshToken", newRefreshToken, {
-          httpOnly: true,
-          maxAge: OPTIONS.refreshAge,
-        });
+        res.cookie("refreshToken", newRefreshToken, cookieOptions);
         res.status(200).send({ accessToken: newAccessToken, user: userDTO });
       } catch (error) {
         res.status(401).send({ msg: MESSAGES.auth.expired });
