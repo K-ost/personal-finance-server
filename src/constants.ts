@@ -26,7 +26,7 @@ export const OPTIONS = {
   refreshAge: 1 * 24 * 60 * 60 * 1000,
 };
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.MODE === "production";
 
 export const cookieOptions: CookieOptions = {
   httpOnly: true,
