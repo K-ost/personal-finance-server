@@ -18,7 +18,7 @@ function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
 
     jwt.verify(token, process.env.ACCESS_TOKEN as string, (err, data) => {
       if (err) {
-        res.status(400).send({ msg: MESSAGES.auth.noToken });
+        res.status(401).send({ msg: MESSAGES.auth.noToken });
         return;
       }
       req.user = data;
