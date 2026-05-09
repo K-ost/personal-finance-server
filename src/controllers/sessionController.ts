@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { Session } from "../schemas/Session";
 import { MESSAGES } from "../constants";
 
@@ -19,7 +20,16 @@ class SessionController implements ISessionController {
 
   async clearAllSessions(req: Request, res: Response): Promise<void> {
     try {
-      const db = await Session.deleteMany();
+      const exceptId = req.query.exceptId;
+      if (!exceptId) {
+        res.status(404).send({ msg: "No exceptId" });
+        return;
+      }
+
+      const db = await Session.deleteMany({
+        userId: { $ne: new Types.ObjectId(exceptId as string) },
+      });
+
       if (db.deletedCount === 0) {
         res.status(400).send({ msg: "No active sessions" });
         return;
