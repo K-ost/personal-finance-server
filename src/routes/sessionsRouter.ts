@@ -4,7 +4,7 @@ import authMiddleware from "../middleware/auth-middleware";
 
 const sessionRouter = Router();
 
-sessionRouter.get("/sessions", authMiddleware, sessionController.getAllSessions);
-sessionRouter.delete("/clear", authMiddleware, sessionController.clearAllSessions);
+sessionRouter.get("/sessions", sessionController.getAllSessions);
+sessionRouter.delete("/clear", sessionController.clearAllSessions);
 
 export default sessionRouter;

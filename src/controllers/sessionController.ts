@@ -20,14 +20,15 @@ class SessionController implements ISessionController {
 
   async clearAllSessions(req: Request, res: Response): Promise<void> {
     try {
-      const exceptId = req.query.exceptId;
-      if (!exceptId) {
-        res.status(404).send({ msg: "No exceptId" });
+      const refreshToken = req.cookies["refreshToken"];
+
+      if (!refreshToken) {
+        res.status(404).send({ msg: MESSAGES.auth.noAuth });
         return;
       }
 
       const db = await Session.deleteMany({
-        userId: { $ne: new Types.ObjectId(exceptId as string) },
+        token: { $ne: refreshToken },
       });
 
       if (db.deletedCount === 0) {
