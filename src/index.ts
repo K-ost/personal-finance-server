@@ -11,6 +11,7 @@ import budgetsRouter from "./routes/budgetsRouter";
 import potsRouter from "./routes/potsRouter";
 import dbRouter from "./routes/dbRouter";
 import sessionRouter from "./routes/sessionsRouter";
+import userRouter from "./routes/userRouter";
 
 // Server settings
 const server: Express = express();
@@ -33,6 +34,7 @@ server.use("/api", potsRouter);
 server.use("/api", authRouter);
 server.use("/api", dbRouter);
 server.use("/api", sessionRouter);
+server.use("/api", userRouter);
 
 // Running server
 server.listen(PORT, async () => {

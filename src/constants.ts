@@ -8,6 +8,7 @@ export const MESSAGES = {
   entityAdded: "The entity has been added",
   entityEdited: "The entity has been edited",
   entityDeleted: "The entity has been deleted",
+  entityNotExists: "The entity doesn't exist",
   emailIncorrect: "Incorrect email",
   passIncorrect: "Incorrect password",
   defaultEntity:
