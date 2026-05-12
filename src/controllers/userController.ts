@@ -11,8 +11,13 @@ interface IUserController {
 class UserController implements IUserController {
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await User.find();
-      res.status(200).send(users);
+      const users = await User.find({}, { password: false }).lean();
+      const data = users.map((user) => ({
+        id: user._id,
+        ...user,
+        _id: undefined,
+      }));
+      res.status(200).send(data);
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
     }
