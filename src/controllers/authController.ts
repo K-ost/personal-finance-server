@@ -33,9 +33,15 @@ class AuthController implements IAuthController {
         role: "user",
       };
 
-      await User.create(newUser);
+      const user = await User.create(newUser);
 
-      res.status(201).send({ msg: MESSAGES.userRegistered });
+      const userDTO = new UserDTO(user);
+      const { accessToken, refreshToken } = tokenService.generateTokens(userDTO);
+
+      await Session.create({ token: refreshToken, userId: user._id });
+
+      res.cookie("refreshToken", refreshToken, cookieOptions);
+      res.status(201).send({ accessToken, user: userDTO });
     } catch (error) {
       res.status(500).send({ msg: MESSAGES.serverError });
     }
